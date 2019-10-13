@@ -1,6 +1,6 @@
-var hereUrl = 'https://1.base.maps.api.here.com/maptile/2.1/maptile/newest/normal.day/{z}/{x}/{y}/256/png8?app_id=S3SY3GkmTPi6s8GZduuc&app_code=XwZ98yV24DTB-8PYwEU1mQ';
+const hereUrl = 'https://1.base.maps.api.here.com/maptile/2.1/maptile/newest/normal.day/{z}/{x}/{y}/256/png8?app_id=S3SY3GkmTPi6s8GZduuc&app_code=XwZ98yV24DTB-8PYwEU1mQ';
 
-var foodPointStyle = new ol.style.Style({
+const foodPointStyle = new ol.style.Style({
   image: new ol.style.Circle({
     radius: 7,
     fill: new ol.style.Fill({color: 'black'}),
@@ -10,7 +10,7 @@ var foodPointStyle = new ol.style.Style({
   })
 });
 
-var touristPointStyle = new ol.style.Style({
+const touristPointStyle = new ol.style.Style({
   image: new ol.style.Circle({
     radius: 7,
     fill: new ol.style.Fill({color: 'yellow'}),
@@ -20,7 +20,7 @@ var touristPointStyle = new ol.style.Style({
   })
 });
 
-var transportPointStyle = new ol.style.Style({
+const transportPointStyle = new ol.style.Style({
   image: new ol.style.Circle({
     radius: 7,
     fill: new ol.style.Fill({color: 'white'}),
@@ -30,7 +30,7 @@ var transportPointStyle = new ol.style.Style({
   })
 });
 
-var styleFunction = function(feature) {
+const styleFunction = function(feature) {
   const {category} = feature.getProperties();
   if (category === 'tourist') {
     return touristPointStyle
@@ -42,42 +42,42 @@ var styleFunction = function(feature) {
   return foodPointStyle;
 };
 
-var vectorSource = new ol.source.Vector({
+const vectorSource = new ol.source.Vector({
   features: (new ol.format.GeoJSON()).readFeatures(allFeatures)
 });
 
-var vectorSourceFile = new ol.source.Vector({
+const vectorSourceFile = new ol.source.Vector({
   url: 'data/features.geojson',
   format: new ol.format.GeoJSON()
 });
 
-var vectorLayer = new ol.layer.Vector({
+const vectorLayer = new ol.layer.Vector({
   source: vectorSource,
   style: styleFunction
 });
 
-var mousePositionControl = new ol.control.MousePosition({
+const mousePositionControl = new ol.control.MousePosition({
   coordinateFormat: ol.coordinate.createStringXY(4),
   projection: 'EPSG:4326',
   undefinedHTML: '&nbsp;'
 });
 
-var mousePositionControl2 = new ol.control.MousePosition({
+const mousePositionControl2 = new ol.control.MousePosition({
   coordinateFormat: ol.coordinate.createStringXY(0),
   projection: 'EPSG:3857',
   undefinedHTML: '&nbsp;'
 });
 
-var selectPointerMove = new ol.interaction.Select({
+const selectPointerMove = new ol.interaction.Select({
   condition: ol.events.condition.singleclick
 });
 
 selectPointerMove.on('select', (evt) => {
   if (evt.selected && evt.selected.length > 0) {
-    var feature = evt.selected[0];
-    var coordinates = feature.getGeometry().flatCoordinates;
+    const feature = evt.selected[0];
+    const coordinates = feature.getGeometry().flatCoordinates;
     if (coordinates) {
-      var title = feature.getProperties().title;
+      const title = feature.getProperties().title;
       document.getElementById('popup').innerHTML = buildPopupHTML(feature);
       overlay.setPosition(coordinates);
     }
@@ -86,7 +86,7 @@ selectPointerMove.on('select', (evt) => {
   }
 });
 
-var buildPopupHTML = (feature) => {
+const buildPopupHTML = (feature) => {
   const {title, description, link} = feature.getProperties();
   return `
   <h10>${title}</h10>
@@ -96,19 +96,19 @@ var buildPopupHTML = (feature) => {
   `;
 }
 
-var overlay = new ol.Overlay({
+const overlay = new ol.Overlay({
   positioning: 'bottom-right',
   element: document.getElementById('popup'),
   position: undefined
 });
 
-var coordinatesOverlay = new ol.Overlay({
+const coordinatesOverlay = new ol.Overlay({
   positioning: 'bottom-right',
   element: document.getElementById('coordinates-popup'),
   position: undefined
 });
 
-var map = new ol.Map({
+const map = new ol.Map({
   layers: [
     new ol.layer.Tile({
       source: new ol.source.OSM()
@@ -144,7 +144,7 @@ map.on('singleclick', (evt) => {
   }
 });
 
-var showCoordinatePopup = (evt) => {
+const showCoordinatePopup = (evt) => {
   const coordinates = evt.coordinate;
   const pixel = map.getPixelFromCoordinate(coordinates);
   const featuresAtPixel = map.getFeaturesAtPixel(pixel);
